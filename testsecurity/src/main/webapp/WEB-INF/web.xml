@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="4.0" xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_4_0.xsd">
+    <display-name>SpringMVC</display-name>
+
+    <!-- 加载Spring配置文件 -->
+    <!-- 可以配置contextConfigLocation初始化参数 -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring/spring.xml</param-value>
+    </context-param>
+
+    <!-- 字符集过滤器 -->
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <async-supported>true</async-supported>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- Spring监听器ContextLoaderListerner -->
+    <listener>
+        <description>Spring监听器</description>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- 防止Spring内存溢出监听器 -->
+    <listener>
+        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+    </listener>
+
+    <!-- Spring MVC servlet定义 -->
+    <servlet>
+        <servlet-name>SpringMVC</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+
+        <!-- 自定义servlet.xml配置文件的位置和名称,默认为WEB-INF目录下,名称为[<servlet-name>]-servlet.xml,如srping-servlet.xml -->
+        <init-param>
+            <description>SpringMVC</description>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring/spring-mvc-servlet.xml</param-value>
+        </init-param>
+
+        <!-- 设置启动的优先级,这里表示启动容器时初始化改servlet -->
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <!-- 通过将DispatcherServlet映射到/,声明了它会座位默认的servlet并且会处理所有的请求,包过对静态资源的请求 -->
+    <servlet-mapping>
+        <servlet-name>SpringMVC</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!-- 设置session超时时间 -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+    <welcome-file-list>
+        <welcome-file>/index.html</welcome-file>
+    </welcome-file-list>
+</web-app>
